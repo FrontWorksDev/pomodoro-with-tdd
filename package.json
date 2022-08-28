@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "lint": "eslint --fix --ext .tsx,.ts src/",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "react": "^18.2.0",
