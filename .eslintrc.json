@@ -9,7 +9,19 @@
     "standard-with-typescript",
     "prettier"
   ],
-  "overrides": [],
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.+(ts|tsx|js)",
+        "**/?(*.)+(spec|test).+(ts|tsx|js)"
+      ],
+      "extends": [
+        "plugin:jest/recommended",
+        "plugin:jest-dom/recommended",
+        "plugin:testing-library/react"
+      ]
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": "latest",
     "ecmaFeatures": {
@@ -18,6 +30,11 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["react"],
+  "plugins": [
+    "react",
+    "jest",
+    "jest-dom",
+    "testing-library"
+  ],
   "rules": {}
 }
