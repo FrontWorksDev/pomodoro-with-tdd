@@ -36,5 +36,13 @@
     "jest-dom",
     "testing-library"
   ],
-  "rules": {}
+  "rules": {
+    "react/self-closing-comp": [
+      "error",
+      {
+        "component": true,
+        "html": true
+      }
+    ]
+  }
 }
