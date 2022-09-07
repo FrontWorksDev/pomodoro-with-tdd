@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Timer {
   work: number;
@@ -38,12 +38,19 @@ const App: React.FunctionComponent = () => {
   });
 
   const onButtonClick = (): void => {
-    setState({
-      ...state,
-      isTimerOn: !state.isTimerOn,
+    setState((state) => {
+      setInterval(() => {
+        timerCount();
+      }, 1000);
+      return { ...state, isTimerOn: !state.isTimerOn };
     });
   };
 
+  const timerCount = (): void => {
+    setState((state) => {
+      return { ...state, timeLeft: state.timeLeft - 1 };
+    });
+  };
   return (
     <>
       <div data-testid='timeLeft'>{secondToMMSS(state.timeLeft)}</div>
