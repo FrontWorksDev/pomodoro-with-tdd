@@ -18,6 +18,8 @@ interface State {
   timerMode: TimerMode;
 }
 
+let timerCountInterval = 0;
+
 const secondToMMSS = (second: number): string => {
   const MM =
     second >= 10 * 60
@@ -37,9 +39,15 @@ const App: React.FunctionComponent = () => {
     timerMode: "work",
   });
 
+  useEffect(() => {
+    return () => {
+      clearInterval(timerCountInterval);
+    };
+  }, []);
+
   const onButtonClick = (): void => {
     setState((state) => {
-      setInterval(() => {
+      timerCountInterval = window.setInterval(() => {
         timerCount();
       }, 1000);
       return { ...state, isTimerOn: !state.isTimerOn };
