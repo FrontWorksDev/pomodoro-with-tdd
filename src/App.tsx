@@ -1,34 +1,75 @@
-import React, { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
 
-const App: React.FunctionComponent = () => {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+interface Timer {
+  work: number;
+  break: number;
 }
 
-export default App
+const TIMER_LENGTH: Timer = {
+  work: 25 * 60,
+  break: 5 * 60,
+};
+
+type TimerMode = "work" | "break";
+
+interface State {
+  timeLeft: number;
+  isTimerOn: boolean;
+  timerMode: TimerMode;
+}
+
+let timerCountInterval = 0;
+
+const secondToMMSS = (second: number): string => {
+  const MM =
+    second >= 10 * 60
+      ? Math.floor(second / 60).toString()
+      : second >= 60
+      ? "0" + Math.floor(second / 60).toString()
+      : "00";
+  const SS = second % 60 >= 10 ? second % 60 : `0${second % 60}`;
+
+  return `${MM}:${SS}`;
+};
+
+const App: React.FunctionComponent = () => {
+  const [state, setState] = useState<State>({
+    timeLeft: TIMER_LENGTH.work,
+    isTimerOn: false,
+    timerMode: "work",
+  });
+
+  useEffect(() => {
+    return () => {
+      clearInterval(timerCountInterval);
+    };
+  }, []);
+
+  const onButtonClick = (): void => {
+    setState((state) => {
+      timerCountInterval = window.setInterval(() => {
+        timerCount();
+      }, 1000);
+      return { ...state, isTimerOn: !state.isTimerOn };
+    });
+  };
+
+  const timerCount = (): void => {
+    setState((state) => {
+      return { ...state, timeLeft: state.timeLeft - 1 };
+    });
+  };
+  return (
+    <>
+      <div data-testid='timeLeft'>{secondToMMSS(state.timeLeft)}</div>
+      <button data-testid='timerButton' onClick={() => onButtonClick()}>
+        {state.isTimerOn ? "停止" : "開始"}
+      </button>
+      <div data-testid='timerMode'>
+        {state.timerMode === "work" ? "作業" : "休憩"}
+      </div>
+    </>
+  );
+};
+
+export default App;
